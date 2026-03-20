@@ -339,4 +339,9 @@ goToPage(page: number): void {
 }
   Math = Math; // <-- Add this line
 
+ onCancel() {
+  this.company = this.getEmptyCompany(); // reset object
+  this.isEditMode = false;               // exit edit mode
+}
+
 }
