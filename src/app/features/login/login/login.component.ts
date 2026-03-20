@@ -13,6 +13,7 @@ export class LoginComponent {
   password: string = '';
   errorMessage: string = '';
   loading: boolean = false;
+  showPassword: boolean = false;
   users = [
     { role: 'HR', username: 'hr_user', password: 'Hr@123', route: '/dashboard' },
     { role: 'Manager', username: 'manager_user', password: 'Mg@123', route: '/dashboard' },
@@ -35,6 +36,9 @@ export class LoginComponent {
   //     this.errorMessage = 'Invalid username or password';
   //   }
   // }
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
   login() {
     debugger;
     this.errorMessage = '';

@@ -336,6 +336,9 @@ export interface Company {
   CreatedDate?: Date;
   ModifiedBy?: string;
   ModifiedAt?: Date;
+  companyContact?: string; 
+  companyAddress?: string; 
+  companyEmail?: string;
 }
 export interface MenuRoleDto {
   menuRoleId: number;
@@ -718,6 +721,18 @@ export interface EmployeeMaster {
 export interface ManagerDropdown {
   userId: number;
   fullName: string;
+}
+export interface VisaType {
+  visaTypeId: number;
+  visaTypeName: string;
+  isActive: boolean;
+  companyId: number;
+  regionId: number;
+  companyName: string;
+  regionName: string;
+  userId: number;
+  CompanyName?: string;
+  RegionName?: string;
 }
 @Injectable({
   providedIn: 'root'
@@ -1449,8 +1464,8 @@ CreateEmployeeImmigration(formData: FormData): Observable<any> {
     return this.http.delete(`${this.baseUrl}/Employee/DeleteImmigration/${id}`)
   }
 // Visa Types Dropdown
-getVisaTypes(): Observable<any[]> {
-  return this.http.get<any[]>(`${this.baseUrl}/Employee/GetVisaTypes`);
+getVisaTypesByUser(companyId: number, regionId: number): Observable<any[]> {
+  return this.http.get<any[]>(`${this.baseUrl}/Employee/GetVisaTypesByUser?companyId=${companyId}&regionId=${regionId}`);
 }
 
 // Status Dropdown
@@ -2416,5 +2431,24 @@ deletePlan(id:any){
 
 applyPlan(data:any){
  return this.http.post(this.baseUrl + '/SubscriptionPlan/ApplyPlan',data);
+}
+// Get List
+getVisaTypeList(userId: number) {
+  return this.http.get(`${this.baseUrl}/MasterData/visa-type-list?userId=${userId}`);
+}
+
+// Create
+createVisaType(data: any) {
+  return this.http.post(`${this.baseUrl}/MasterData/CreateVisaType`, data);
+}
+
+// Update
+updateVisaType(data: any) {
+  return this.http.post(`${this.baseUrl}/MasterData/UpdateVisaType`, data);
+}
+
+// Delete
+deleteVisaType(id: number) {
+  return this.http.post(`${this.baseUrl}/MasterData/DeleteVisaType?id=${id}`, {});
 }
 }

@@ -91,6 +91,41 @@
                 placeholder="Enter headquarters location"
               />
             </div>
+            <!-- Company Number -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Company Number</label>
+              <input
+                type="text"
+                class="form-control"
+                name="CompanyContact"
+                [(ngModel)]="company.companyContact"
+                placeholder="Enter company contact"
+              />
+            </div>
+
+            <!-- Company Address -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Company Address</label>
+              <input
+                type="text"
+                class="form-control"
+                name="CompanyAddress"
+                [(ngModel)]="company.companyAddress"
+                placeholder="Enter company address"
+              />
+            </div>
+
+            <!-- Company Email -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Company Email</label>
+              <input
+                type="email"
+                class="form-control"
+                name="CompanyEmail"
+                [(ngModel)]="company.companyEmail"
+                placeholder="Enter company email"
+              />
+            </div>
 
             <!-- Status Toggle -->
             <div class="col-md-6 d-flex align-items-center">
@@ -203,6 +238,13 @@
          class="fa-solid" 
          [ngClass]="{'fa-sort-up': sortDirection==='asc', 'fa-sort-down': sortDirection==='desc'}"></i>
     </th>
+    <th (click)="toggleSort('companyContact')" style="cursor:pointer;">
+          Contact
+        </th>
+
+        <th (click)="toggleSort('companyEmail')" style="cursor:pointer;">
+          Email
+        </th>
 
     <th class="text-center" (click)="toggleSort('isActive')" style="cursor:pointer;">
       Status
@@ -222,6 +264,8 @@
         <td>{{ c.companyCode || '-' }}</td>
         <td>{{ c.industryType || '-' }}</td>
         <td>{{ c.headquarters || '-' }}</td>
+        <td>{{ c.companyContact || '-' }}</td>
+        <td>{{ c.companyEmail || '-' }}</td>
         <td class="text-center">
           <div class="form-check form-switch d-inline-flex align-items-center justify-content-center">
             <!-- <input
