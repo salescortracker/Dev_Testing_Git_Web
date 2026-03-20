@@ -63,14 +63,17 @@ changePageSize(size: number): void {
   }
 
   loadVisaTypes(): void {
-    this.adminService.getVisaTypes().subscribe({
-      next: (data) => {
-        this.visaTypes = data;
-        console.log("Visa Types Loaded:", data);
-      },
-      error: (err) => console.error("Failed to load visa types", err)
-    });
-  }
+  const companyId = Number(sessionStorage.getItem('CompanyId'));
+  const regionId = Number(sessionStorage.getItem('RegionId'));
+
+  this.adminService.getVisaTypesByUser(companyId, regionId).subscribe({
+    next: (data) => {
+      this.visaTypes = data;
+      console.log("Visa Types Loaded:", data);
+    },
+    error: (err) => console.error("Failed to load visa types", err)
+  });
+}
 
   loadStatuses(): void {
     this.adminService.getStatuses().subscribe({
