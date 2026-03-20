@@ -26,6 +26,19 @@ export interface BankDetails {
   micrcode?: string;
   upiid?: string;
 }
+
+export interface Grade {
+  gradeID: number;
+  gradeName: string;
+  companyID: number;
+  regionId: number;
+  isActive: boolean;
+
+  companyName?: string;
+  regionName?: string;
+  userId?: number;
+}
+
 export interface CompanyPolicy {
   PolicyId: number;
   CompanyId: number;
@@ -2417,4 +2430,29 @@ deletePlan(id:any){
 applyPlan(data:any){
  return this.http.post(this.baseUrl + '/SubscriptionPlan/ApplyPlan',data);
 }
+
+getDesignation(companyId: number, regionId: number) {
+  return this.http.get<any[]>(
+    `${this.baseUrl}/GetDesignations?companyId=${companyId}&regionId=${regionId}`
+  );
+}
+
+getGrades(companyId: number) {
+  return this.http.get<any>(`${this.baseUrl}/MasterData/GetGradeAll`, {
+    params: { companyId}
+  });
+}
+
+createGrade(data: Grade) {
+  return this.http.post(`${this.baseUrl}/MasterData/CreateGrade`, data);
+}
+
+updateGrade(data: Grade) {
+  return this.http.post(`${this.baseUrl}/MasterData/UpdateGrade`, data);
+}
+
+deleteGrade(id: number) {
+  return this.http.post(`${this.baseUrl}/MasterData/DeleteGrade?id=${id}`, {});
+}
+
 }
