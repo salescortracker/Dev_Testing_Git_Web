@@ -336,6 +336,9 @@ export interface Company {
   CreatedDate?: Date;
   ModifiedBy?: string;
   ModifiedAt?: Date;
+  companyContact?: string; 
+  companyAddress?: string; 
+  companyEmail?: string;
 }
 export interface MenuRoleDto {
   menuRoleId: number;

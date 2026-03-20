@@ -84,6 +84,9 @@ closeUploadPopup() {
       industryType: '',
       headquarters: '',
       isActive: true,
+      companyContact: '',  
+      companyAddress: '', 
+      companyEmail: '',
       userId: sessionStorage.getItem('UserId') ? Number(sessionStorage.getItem('UserId')) : 0
     };
   }
@@ -128,7 +131,7 @@ closeUploadPopup() {
         },
         error: (err) =>{
            this.spinner.hide();
-          Swal.fire('Error', 'Update failed! Please contact IT Administrator.', 'error');
+          Swal.fire('Error', 'Update failed!  Oops! This company name is already added.', 'error');
         }
       });
     } else {
@@ -150,7 +153,7 @@ closeUploadPopup() {
         },
         error: (err) =>{
           this.spinner.hide();
-              Swal.fire('Error', 'Create failed! Please contact IT Administrator.', 'error');
+              Swal.fire('Error', 'Oops! This company name is already added.', 'error');
        
         }
           
@@ -163,7 +166,6 @@ closeUploadPopup() {
   // ------------------------------------------------------------
   editCompany(c: Company): void {
     this.company = { ...c };
-    console.log(this.company);
     this.isEditMode = true;
   }
 
