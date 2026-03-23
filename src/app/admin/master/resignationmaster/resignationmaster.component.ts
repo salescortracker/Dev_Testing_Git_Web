@@ -132,24 +132,55 @@ export class ResignationmasterComponent {
     );
   }
 
-  loadCompanies() {
-    this.adminService.getCompanies(null, this.userId).subscribe({
-      next: (res: Company[]) => {
-        this.companies = res || [];
-        this.companies.forEach(c => this.companyMap[c.companyId] = c.companyName);
-        this.loadRegions();
-      }
-    });
-  }
+loadCompanies() {
+  this.adminService.getCompanies(null, this.userId).subscribe({
+    next: (res: any) => {
+      console.log('All Companies 👉', res);
 
-  loadRegions() {
-    this.adminService.getRegions(null, this.userId).subscribe({
-      next: (res: Region[]) => {
-        this.regions = res.filter(r => r.companyID == this.companyId);
-        this.regions.forEach(r => this.regionMap[r.regionID] = r.regionName);
-      }
-    });
-  }
+      const data = res?.data ?? res ?? [];
+
+      // 🔥 Only active companies
+      this.companies = data.filter((c: any) => c.isActive === true);
+
+      // ✅ Reset & build company map
+      this.companyMap = {};
+      this.companies.forEach((c: any) => {
+        this.companyMap[c.companyId] = c.companyName;
+      });
+
+      console.log('Active Companies 👉', this.companies);
+
+      // ✅ Load regions after companies
+      this.loadRegions();
+    }
+  });
+}
+
+loadRegions() {
+  this.adminService.getRegions(null, this.userId).subscribe({
+    next: (res: any) => {
+      console.log('All Regions 👉', res);
+
+      const data = res?.data ?? res ?? [];
+
+      // 🔥 Only active regions
+      const activeRegions = data.filter((r: any) => r.isActive === true);
+
+      // ✅ Filter by selected company
+      this.regions = activeRegions.filter(
+        (r: any) => r.companyID == this.companyId
+      );
+
+      // ✅ Reset & build region map
+      this.regionMap = {};
+      this.regions.forEach((r: any) => {
+        this.regionMap[r.regionID] = r.regionName;
+      });
+
+      console.log('Filtered Regions 👉', this.regions);
+    }
+  });
+}
 
   clearForm() {
     this.resignation = {

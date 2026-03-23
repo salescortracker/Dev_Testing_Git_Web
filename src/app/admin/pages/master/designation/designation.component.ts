@@ -47,6 +47,7 @@ loadDepartments(): void {
   this.adminservice.getDepartments(this.userId).subscribe({
     next: (res: any) => {
       this.departments = res?.data?.data || [];
+       this.departments = this.departments.filter((d: any) => d.isActive === true);
     },
     error: () => {
       Swal.fire('Error', 'Failed to load departments.', 'error');
@@ -55,20 +56,39 @@ loadDepartments(): void {
 }
 companies:any;
 regions:any;
-  loadCompanies(): void {
-   
-    this.adminservice.getCompanies(null,this.userId).subscribe({
-      next: (res:any) => (this.companies = res),
-      error: () => Swal.fire('Error', 'Failed to load companies.', 'error')
-    });
-  }
+loadCompanies(): void {
+  this.adminservice.getCompanies(null, this.userId).subscribe({
+    next: (res: any) => {
+      console.log('All Companies 👉', res);
 
-  loadRegions(): void {
-    this.adminservice.getRegions(null,this.userId).subscribe({
-      next: (res:any) => (this.regions = res),
-      error: () => Swal.fire('Error', 'Failed to load regions.', 'error')
-    });
-  }
+      // 🔥 Handle both direct array & res.data cases
+      const data = res?.data ?? res ?? [];
+
+      // ✅ Filter only active companies
+      this.companies = data.filter((c: any) => c.isActive === true);
+
+      console.log('Active Companies 👉', this.companies);
+    },
+    error: () => Swal.fire('Error', 'Failed to load companies.', 'error')
+  });
+}
+
+ loadRegions(): void {
+  this.adminservice.getRegions(null, this.userId).subscribe({
+    next: (res: any) => {
+      console.log('All Regions 👉', res);
+
+      // 🔥 Handle both direct array & res.data cases
+      const data = res?.data ?? res ?? [];
+
+      // ✅ Filter only active regions
+      this.regions = data.filter((r: any) => r.isActive === true);
+
+      console.log('Active Regions 👉', this.regions);
+    },
+    error: () => Swal.fire('Error', 'Failed to load regions.', 'error')
+  });
+}
   getCompanyName(companyId: number): string {
     const c = this.companies.find((x:any) => x.companyID === companyId);
     return c ? c.companyName : '-';

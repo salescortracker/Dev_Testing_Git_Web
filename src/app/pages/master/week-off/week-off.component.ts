@@ -188,54 +188,73 @@ weekoffDates: { value: string, display: string }[] = [
 
   // ================= LOAD COMPANIES =================
 
-  loadCompanies(): void {
+ loadCompanies(): void {
 
-    this.adminService.getCompanies(null, this.userId).subscribe({
-      next: (res: Company[]) => {
+  this.adminService.getCompanies(null, this.userId).subscribe({
+    next: (res: any) => {
 
-        this.companies = res || [];
+      console.log('All Companies 👉', res);
 
-        this.companyMap = {};
-        this.companies.forEach(c =>
-          this.companyMap[c.companyId] = c.companyName
-        );
+      const data = res?.data ?? res ?? [];
 
-        if (this.companyId) {
-          this.loadRegions();
-        }
-      },
-      error: () => Swal.fire('Error', 'Failed to load companies', 'error')
-    });
-  }
+      // 🔥 Only active companies
+      this.companies = data.filter((c: any) => c.isActive === true);
+
+      // ✅ Build map from active companies
+      this.companyMap = {};
+      this.companies.forEach((c: any) => {
+        this.companyMap[c.companyId] = c.companyName;
+      });
+
+      console.log('Active Companies 👉', this.companies);
+
+      // ✅ Load regions if company already selected
+      if (this.companyId) {
+        this.loadRegions();
+      }
+    },
+    error: () => Swal.fire('Error', 'Failed to load companies', 'error')
+  });
+}
 
   // ================= LOAD REGIONS =================
 
-  loadRegions(): void {
+loadRegions(): void {
 
-    this.adminService.getRegions(null, this.userId).subscribe({
-      next: (res: Region[]) => {
+  this.adminService.getRegions(null, this.userId).subscribe({
+    next: (res: any) => {
 
-        const allRegions = res || [];
+      console.log('All Regions 👉', res);
 
-        this.regionMap = {};
-        allRegions.forEach(r =>
-          this.regionMap[r.regionID] = r.regionName
-        );
+      const data = res?.data ?? res ?? [];
 
-        this.regions = allRegions.filter(r =>
-          r.companyID == this.companyId
-        );
+      // 🔥 Only active regions
+      const activeRegions = data.filter((r: any) => r.isActive === true);
 
-        if (!this.regionId && this.regions.length > 0) {
-          this.regionId = this.regions[0].regionID;
-        }
+      // ✅ Build map from active regions
+      this.regionMap = {};
+      activeRegions.forEach((r: any) => {
+        this.regionMap[r.regionID] = r.regionName;
+      });
 
-        this.weekoff.RegionID = this.regionId;
-      },
-      error: () => Swal.fire('Error', 'Failed to load regions', 'error')
-    });
-  }
+      // ✅ Filter by selected company
+      this.regions = activeRegions.filter((r: any) =>
+        r.companyID == this.companyId
+      );
 
+      console.log('Filtered Regions 👉', this.regions);
+
+      // ✅ Auto-select region if not selected
+      if (!this.regionId && this.regions.length > 0) {
+        this.regionId = this.regions[0].regionID;
+      }
+
+      // ✅ Bind to model
+      this.weekoff.RegionID = this.regionId;
+    },
+    error: () => Swal.fire('Error', 'Failed to load regions', 'error')
+  });
+}
   onCompanyChange(): void {
 
     sessionStorage.setItem('CompanyId', this.companyId.toString());

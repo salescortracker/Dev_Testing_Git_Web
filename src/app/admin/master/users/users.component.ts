@@ -37,10 +37,14 @@ loadDepartments(): void {
   debugger;
   this.userService.getDepartments(this.userId).subscribe({
     next: (res: any) => {
-      console.log(res);
-      debugger;
-      this.departments = res?.data?.data ?? [];
-      console.log("Departments Loaded:", this.departments);
+      console.log('departments :', res);
+
+      const allDepartments = res?.data?.data ?? [];
+
+      // 🔥 Filter only active records
+      this.departments = allDepartments.filter((d: any) => d.isActive === true);
+
+      console.log("Filtered Active Departments:", this.departments);
     },
     error: (err) => {
       console.error(err);

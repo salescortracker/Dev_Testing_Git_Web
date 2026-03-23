@@ -23,7 +23,6 @@ export class SidebarComponent {
   loadMenus(roleId: number): void {
     this.menuService.getMenusByRoleId(roleId).subscribe({
       next: (menus: MenuRoleDto[]) => {
-       debugger;
        sessionStorage.setItem('menus', JSON.stringify(menus)); // Store raw menu data in session
         this.menuItems =this.sortMenuItems(this.mapToMenuItems(menus));
       },
