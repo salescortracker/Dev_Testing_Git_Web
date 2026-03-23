@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { AdminService,CertificationType } from '../../../servies/admin.service';  
+import { AdminService,CertificationType, Company, Region } from '../../../servies/admin.service';  
 import Swal from 'sweetalert2';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as XLSX from 'xlsx';
@@ -11,7 +11,14 @@ interface UploadModel {
   columns: string[];  // REQUIRED internally
   data: any[];        // REQUIRED internally
 }
-
+// export interface CertificationType {
+//   certificationTypeID: number;
+//   certificationTypeName: string;
+//   isActive: boolean;
+//   userId:number;
+//   companyID: number;
+//   regionID: number;
+// }
 
 @Component({
   selector: 'app-certification-type',
@@ -20,236 +27,236 @@ interface UploadModel {
   styleUrl: './certification-type.component.css'
 })
 export class CertificationTypeComponent {
-  certifications: CertificationType[] = [];
+searchText = '';
+  certificationList: CertificationType[] = [];
   certification!: CertificationType;
-  isEditMode = false;
 
-  searchText = '';
-  statusFilter: boolean | '' = '';
-  pageSize = 5;
-  currentPage = 1;
+  companies: Company[] = [];
+  regions: Region[] = [];
 
+  companyMap: Record<number, string> = {};
+  regionMap: Record<number, string> = {};
+
+  userId!: number;
   companyId!: number;
   regionId!: number;
 
-  sortColumn: keyof CertificationType | '' = '';
-  sortDirection: 'asc' | 'desc' = 'asc';
-
-  showUploadPopup = false;
-  certificationModel!: UploadModel;
+  isEditMode = false;
 
   constructor(
     private adminService: AdminService,
-    private cd: ChangeDetectorRef
+    private spinner: NgxSpinnerService
   ) {}
-userId:any;
+
   ngOnInit(): void {
-    this.companyId = Number(sessionStorage.getItem('CompanyId'));
-    this.regionId = Number(sessionStorage.getItem('RegionId'));
- this.userId = Number(sessionStorage.getItem("UserId"));
-    if (!this.companyId || !this.regionId) {
-      Swal.fire('Error', 'Company / Region not found', 'error');
-      return;
-    }
 
-    this.resetForm();
-    this.loadCertifications();
-    this.loadCompanies();
-    this.loadRegions();
-  }
+    this.userId = Number(sessionStorage.getItem("UserId"));
+    this.companyId = Number(sessionStorage.getItem("CompanyId"));
+    this.regionId = Number(sessionStorage.getItem("RegionId"));
 
-  // ================= FORM =================
-  resetForm(): void {
     this.certification = {
-      certificationTypeID: 0,
-      certificationTypeName: '',
-      isActive: true,
-      companyID: this.companyId,
-      regionID: this.regionId,
-      userId:Number(sessionStorage.getItem("UserId"))
+      CertificationTypeID: 0,
+      CompanyID: this.companyId,
+      RegionID: this.regionId,
+      CertificationTypeName: '',
+      IsActive: true
     };
-    this.isEditMode = false;
+
+    this.loadCompanies();
+    this.loadCertificationTypes();
   }
 
-  onSubmit(): void {
-    const api$ = this.isEditMode
-      ? this.adminService.updateCertificationType(
-          this.certification.certificationTypeID,
-          this.certification
-        )
-      : this.adminService.createCertificationType(this.certification);
+  // ================= LOAD DATA =================
 
-    api$.subscribe(() => {
-      Swal.fire('Success', 'Saved successfully', 'success');
-      this.resetForm();
-      this.loadCertifications();
-    });
-  }
+  loadCertificationTypes() {
+    this.spinner.show();
 
-  editCertification(c: CertificationType): void {
-   this.certification = {
-      ...c,
-      certificationTypeID: c.certificationTypeID ?? (c as any).CertificationTypeID
-    };
-    this.isEditMode = true;
-  }
+    this.adminService.getCertificationTypes(this.userId).subscribe({
+      next: (res: any) => {
 
-  // ================= HARD DELETE =================
-  deleteCertification(c: CertificationType): void {
-    Swal.fire({
-      title: 'Delete Certification?',
-      text: 'This will permanently delete the record',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete',
-      cancelButtonText: 'Cancel'
-    }).then(result => {
-      if (result.isConfirmed) {
-          const id = c.certificationTypeID;
-          console.log('Deleting CertificationType with ID:',c. certificationTypeID);
-                    console.log('Deleting CertificationType with ID:', c);
+        const data = res.data || [];
 
-        
-       this.adminService.deleteCertificationType(id)
-          .subscribe({
-            next: () => {
-              Swal.fire('Deleted', 'Record deleted successfully', 'success');
-              this.loadCertifications();
-            },
-            error: () => {
-              Swal.fire('Error', 'Delete failed', 'error');
-            }
-          });
+        this.certificationList = data.map((x: any) => ({
+          CertificationTypeID: x.certificationTypeID,
+          CertificationTypeName: x.certificationTypeName,
+          CompanyID: x.companyID,
+          RegionID: x.regionID,
+          IsActive: x.isActive
+        }));
+
+        this.spinner.hide();
+      },
+      error: () => {
+        this.spinner.hide();
+        Swal.fire('Error', 'Failed to load data', 'error');
       }
     });
   }
 
-  // ================= LIST =================
-  loadCertifications(): void {
-    this.adminService
-      .getCertificationTypes(this.userId, this.regionId)
-      .subscribe(res => {
-        debugger;
-     this.certifications = (res as any[]).map(item => ({
-          ...item,
-          certificationTypeID: item.certificationTypeID ?? item.CertificationTypeID,
-          CertificationTypeID: item.CertificationTypeID ?? item.certificationTypeID
-        }));
-      });
+  // ================= SUBMIT =================
+
+  onSubmit() {
+
+    this.certification.CompanyID = this.companyId;
+    this.certification.RegionID = this.regionId;
+    this.certification.userId = this.userId;
+
+    this.spinner.show();
+
+    const obs = this.isEditMode
+      ? this.adminService.updateCertificationType(this.certification)
+      : this.adminService.createCertificationType(this.certification);
+
+    obs.subscribe({
+      next: () => {
+        this.spinner.hide();
+
+        Swal.fire(
+          this.isEditMode ? 'Updated!' : 'Added!',
+          'Certification Type saved successfully.',
+          'success'
+        );
+
+        this.loadCertificationTypes();
+        this.clearForm();
+      },
+      error: () => {
+        this.spinner.hide();
+        Swal.fire('Error', 'Operation failed', 'error');
+      }
+    });
   }
 
+  // ================= EDIT =================
+
+  editCertification(c: CertificationType) {
+    this.certification = { ...c };
+
+    this.companyId = c.CompanyID;
+    this.regionId = c.RegionID;
+
+    this.loadRegions();
+    this.isEditMode = true;
+  }
+
+  // ================= DELETE =================
+
+  deleteCertification(c: CertificationType) {
+
+    Swal.fire({
+      title: `Delete "${c.CertificationTypeName}"?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes'
+    }).then(result => {
+
+      if (result.isConfirmed) {
+
+        this.spinner.show();
+
+        this.adminService.deleteCertificationType(c.CertificationTypeID).subscribe({
+          next: () => {
+            this.spinner.hide();
+            Swal.fire('Deleted!', 'Deleted successfully', 'success');
+            this.loadCertificationTypes();
+          },
+          error: () => {
+            this.spinner.hide();
+            Swal.fire('Error', 'Delete failed', 'error');
+          }
+        });
+
+      }
+    });
+  }
+
+  // ================= FILTER =================
+
   filteredCertifications(): CertificationType[] {
-    return this.certifications.filter(c =>
-      c.certificationTypeName
-        .toLowerCase()
-        .includes(this.searchText.toLowerCase()) &&
-      (this.statusFilter === '' || c.isActive === this.statusFilter)
+    const search = this.searchText?.toLowerCase() || '';
+
+    return this.certificationList.filter(c =>
+      c.CertificationTypeName?.toLowerCase().includes(search)
     );
   }
 
-  get pagedCertifications(): CertificationType[] {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.filteredCertifications().slice(start, start + this.pageSize);
-  }
+  // ================= COMPANY / REGION =================
 
-  // ================= EXPORT =================
-  exportAs(type: 'pdf' | 'excel'): void {
-    if (type === 'excel') {
-      const ws = XLSX.utils.json_to_sheet(this.filteredCertifications());
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'CertificationTypes');
-      XLSX.writeFile(wb, 'CertificationTypes.xlsx');
-    } else {
-      const doc = new jsPDF();
-      autoTable(doc, {
-        head: [['Certification Type', 'Status']],
-        body: this.filteredCertifications().map(c => [
-          c.certificationTypeName,
-          c.isActive ? 'Active' : 'Inactive'
-        ])
-      });
-      doc.save('CertificationTypes.pdf');
-    }
-  }
-  companies: any;
-  regions: any;
-loadCompanies(): void {
-    this.adminService.getCompanies(null,this.userId).subscribe({
-      next: (res:any) => (this.companies = res),
-      error: () => Swal.fire('Error', 'Failed to load companies.', 'error')
+  loadCompanies() {
+    this.adminService.getCompanies(null, this.userId).subscribe({
+      next: (res: Company[]) => {
+
+        this.companies = res || [];
+
+        this.companyMap = {};
+        this.companies.forEach(c =>
+          this.companyMap[c.companyId] = c.companyName
+        );
+
+        if (this.companyId) {
+          this.loadRegions();
+        }
+      }
     });
   }
 
-  loadRegions(): void {
-    this.adminService.getRegions(null,this.userId).subscribe({
-      next: (res:any) => (this.regions = res),
-      error: () => Swal.fire('Error', 'Failed to load regions.', 'error')
+  loadRegions() {
+    this.adminService.getRegions(null, this.userId).subscribe({
+      next: (res: Region[]) => {
+
+        const allRegions = res || [];
+
+        this.regionMap = {};
+        allRegions.forEach(r => {
+          this.regionMap[r.regionID] = r.regionName;
+        });
+
+        this.regions = allRegions.filter(r =>
+          r.companyID == this.companyId
+        );
+
+        if (!this.regionId && this.regions.length > 0) {
+          this.regionId = this.regions[0].regionID;
+        }
+
+        this.certification.RegionID = this.regionId;
+      }
     });
   }
-  // ================= BULK UPLOAD =================
-  openUploadPopup(): void {
-    this.certificationModel = {
-      name: 'CertificationType',
-      structure: {
-        CertificationTypeName: '',
-        IsActive: true,
-        CompanyID: this.companyId,
-        RegionID: this.regionId
-      },
-      columns: [
-        'CertificationTypeName',
-        'IsActive',
-        'CompanyID',
-        'RegionID'
-      ],
-      data: []
+
+  onCompanyChange() {
+    this.certification.CompanyID = this.companyId;
+    this.regionId = 0;
+    this.regions = [];
+    this.loadRegions();
+  }
+
+  onRegionChange() {
+    this.certification.RegionID = this.regionId;
+  }
+
+  // ================= RESET =================
+
+  resetForm() {
+    Swal.fire({
+      title: 'Reset form?',
+      showCancelButton: true
+    }).then(res => {
+      if (res.isConfirmed) {
+        this.clearForm();
+      }
+    });
+  }
+
+  clearForm() {
+    this.certification = {
+      CertificationTypeID: 0,
+      CompanyID: this.companyId,
+      RegionID: this.regionId,
+      CertificationTypeName: '',
+      IsActive: true
     };
 
-    this.cd.detectChanges();
-    this.showUploadPopup = true;
+    this.isEditMode = false;
   }
-
-  closeUploadPopup(): void {
-    this.showUploadPopup = false;
-  }
-
-  onBulkUploadComplete(): void {
-    Swal.fire('Success', 'Bulk upload completed', 'success');
-    this.showUploadPopup = false;
-    this.loadCertifications();
-  }
-// ================= SORTING =================
-sortTable(column: keyof CertificationType): void {
-  if (this.sortColumn === column) {
-    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-  } else {
-    this.sortColumn = column;
-    this.sortDirection = 'asc';
-  }
-
-  this.certifications.sort((a, b) => {
-    const valueA = a[column];
-    const valueB = b[column];
-
-    if (valueA == null || valueB == null) return 0;
-
-    const result =
-      typeof valueA === 'string'
-        ? valueA.localeCompare(valueB as string)
-        : valueA > valueB
-        ? 1
-        : -1;
-
-    return this.sortDirection === 'asc' ? result : -result;
-  });
-}
-
-getSortIcon(column: keyof CertificationType): string {
-  if (this.sortColumn !== column) {
-    return 'fa-sort';
-  }
-  return this.sortDirection === 'asc'
-    ? 'fa-sort-up'
-    : 'fa-sort-down';
-}
 }
