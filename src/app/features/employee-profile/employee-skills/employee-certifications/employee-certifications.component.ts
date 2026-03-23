@@ -103,7 +103,7 @@ certificateFileInput!: ElementRef<HTMLInputElement>;
 loadCertificationTypes() {
   this.adminService.getcmpregionCertificationTypes(this.companyId,this.regionId).subscribe({
     next: res => {
-      this.certificationTypeList = res || [];
+      this.certificationTypeList = res.data || [];
       // once we have types, load certifications and map names
       this.loadCertifications();
     },
