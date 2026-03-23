@@ -234,7 +234,9 @@ export interface Designation {
   companyName:string,
   regionName:string,
   departmentId:number,
-  departmentName:string
+  departmentName:string,
+   gradeId?: number,
+  gradeName?: string,
 }
 
 export interface AssetStatus {
@@ -813,6 +815,9 @@ export class AdminService {
   getRegions(params?: any,userId?: number): Observable<Region[]> {
     return this.getAll<Region>('UserManagement/GetRegion?userId='+userId, params);
   }
+  getRegionsByCompany(companyId: number) {
+  return this.getAll(`MasterData/GetRegionsByCompany?companyId=${companyId}`);
+}
 
   getRegionById(id: number): Observable<Region> {
     return this.getById<Region>('UserManagement/GetRegionById', id);
