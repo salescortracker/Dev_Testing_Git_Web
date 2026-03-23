@@ -36,7 +36,17 @@ userId: number = sessionStorage.getItem('UserId') ? Number(sessionStorage.getIte
     private departmentService: AdminService,
   
   ) {}
+onCancel(): void {
+  this.resetForm();
 
+  Swal.fire({
+    icon: 'error', // 🔴 consistent with other screens
+    title: 'Cancelled',
+    text: 'Operation cancelled.',
+    timer: 1500,
+    showConfirmButton: false
+  });
+}
   ngOnInit(): void {
     this.loadDepartments();
     this.loadCompanies();

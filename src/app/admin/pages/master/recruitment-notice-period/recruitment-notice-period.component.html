@@ -81,7 +81,15 @@
 
             <!-- Buttons -->
             <div class="col-md-10 mt-4 text-end">
-              <button class="btn btn-success me-2"
+               <button
+                type="button"
+                class="btn btn-danger me-2 px-4"
+                (click)="onCancel()"
+              >
+                <i class="fa-solid fa-xmark me-2"></i>
+                Cancel
+              </button>
+              <button class="btn btn-success "
                       type="submit"
                       [disabled]="!noticeForm.valid">
 
@@ -89,12 +97,12 @@
                 {{ isEditMode ? 'Update' : 'Save' }}
               </button>
 
-              <button class="btn btn-secondary"
+              <!-- <button class="btn btn-secondary"
                       type="button"
                       (click)="clearForm()">
                 <i class="fa-solid fa-rotate-left me-2"></i>
                 Reset
-              </button>
+              </button> -->
             </div>
 
           </div>

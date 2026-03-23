@@ -11,10 +11,10 @@
       <div class="d-flex gap-2">
         <!-- Export Dropdown -->
         <div class="dropdown">
-          <button class="btn btn-outline-dark dropdown-toggle" type="button"
+          <!-- <button class="btn btn-outline-dark dropdown-toggle" type="button"
                   data-bs-toggle="dropdown">
             <i class="fa-solid fa-download me-2"></i> Export
-          </button>
+          </button> -->
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" (click)="exportAs('pdf')">Download PDF</a></li>
             <li><a class="dropdown-item" (click)="exportAs('excel')">Download Excel</a></li>
@@ -22,9 +22,9 @@
         </div>
 
         <!-- Bulk Upload -->
-        <button class="btn btn-danger" (click)="openUploadPopup()">
+        <!-- <button class="btn btn-danger" (click)="openUploadPopup()">
           <i class="fa-solid fa-upload me-2"></i> Bulk Upload
-        </button>
+        </button> -->
       </div>
     </div>
 
@@ -60,7 +60,7 @@
             </div>
 
             <!-- Region -->
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label class="form-label fw-semibold">Region</label>
               <select class="form-select"
                       name="regionId"
@@ -84,7 +84,7 @@
             </div> -->
 
             <!-- Status -->
-            <div class="col-md-6 d-flex align-items-center">
+            <div class="col-md-4 d-flex align-items-center">
               <div class="form-check form-switch mt-3">
                 <input class="form-check-input"
                        type="checkbox"
@@ -97,14 +97,33 @@
             </div>
 
             <!-- Submit -->
-            <div class="col-md-2 d-flex align-items-end">
+            <!-- <div class="col-md-2 d-flex align-items-end">
               <button type="submit"
                       class="btn btn-dark w-100"
                       [disabled]="!genderForm.valid">
                 <i class="fa-solid fa-save me-2"></i>
                 {{ isEditMode ? 'Update Gender' : 'Save Gender' }}
               </button>
-            </div>
+            </div> -->
+
+            <div class="col-md-4 d-flex align-items-end gap-2">
+               <button
+    type="button"
+    class="btn btn-danger w-100"
+    (click)="onCancel()"
+  >
+    <i class="fa-solid fa-times me-2"></i>
+    Cancel
+  </button>
+  <button type="submit"
+          class="btn btn-success w-100"
+          [disabled]="!genderForm.valid">
+    <i class="fa-solid fa-save me-2"></i>
+    {{ isEditMode ? 'Update Gender' : 'Save Gender' }}
+  </button>
+
+ 
+</div>
 
           </div>
         </form>

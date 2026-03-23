@@ -304,7 +304,7 @@
       margin: 5px 0;
       font-size: 14px;
     }
-    .btn {
+    /* .btn {
       display: inline-block;
       padding: 8px 14px;
       background: #b02828;
@@ -315,7 +315,7 @@
     }
     .btn:hover {
       background: #901f1f;
-    }
+    } */
 
     /* --- Chatbot --- */
     .chatbot-toggle {

@@ -11,14 +11,14 @@
       <div class="d-flex gap-2">
         <!-- Export Dropdown -->
         <div class="dropdown">
-          <button
+          <!-- <button
             class="btn btn-outline-dark dropdown-toggle"
             type="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
             <i class="fa-solid fa-download me-2"></i> Export
-          </button>
+          </button> -->
           <ul class="dropdown-menu dropdown-menu-end animate__animated animate__fadeIn">
             <li><a class="dropdown-item" (click)="exportAs('pdf')">Download PDF</a></li>
             <li><a class="dropdown-item" (click)="exportAs('excel')">Download Excel</a></li>
@@ -26,9 +26,9 @@
         </div>
 
         <!-- Bulk Upload -->
-        <button class="btn btn-danger" (click)="openUploadPopup()">
+        <!-- <button class="btn btn-danger" (click)="openUploadPopup()">
           <i class="fa-solid fa-upload me-2"></i> Bulk Upload
-        </button>
+        </button> -->
       </div>
     </div>
 
@@ -40,7 +40,7 @@
         <form (ngSubmit)="onSubmit(bloodForm)" #bloodForm="ngForm" novalidate>
           <div class="row g-3">
             <!-- Blood Group Name -->
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label class="form-label fw-semibold">Blood Group Name</label>
            <input
   type="text"
@@ -69,7 +69,7 @@
             </div>
  
             <!-- Status -->
-            <div class="col-md-3 d-flex align-items-center">
+            <div class="col-md-4 d-flex align-items-center">
               <div class="form-check form-switch mt-3">
               
 <input
@@ -86,8 +86,16 @@
             </div>
 
             <!-- Submit -->
-            <div class="col-md-3 d-flex align-items-end">
-              <button type="submit" class="btn btn-dark w-100" [disabled]="!bloodForm.valid">
+            <div class="col-md-4 d-flex justify-content-end align-items-end gap-2">
+               <button
+                type="button"
+                class="btn btn-danger px-4"
+                (click)="onCancel()"
+              >
+                <i class="fa-solid fa-xmark me-2"></i>
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-success" [disabled]="!bloodForm.valid">
                 <i class="fa-solid fa-save me-2"></i>
                 {{ isEditMode ? 'Update Blood Group' : 'Save Blood Group' }}
               </button>

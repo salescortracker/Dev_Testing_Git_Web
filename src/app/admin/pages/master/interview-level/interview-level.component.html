@@ -9,9 +9,9 @@
             </h4>
 
             <div class="dropdown">
-                <button class="btn btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown">
+                <!-- <button class="btn btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown">
                     <i class="fa-solid fa-download me-2"></i> Export
-                </button>
+                </button> -->
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item">Download PDF</a></li>
                     <li><a class="dropdown-item">Download Excel</a></li>
@@ -89,8 +89,16 @@
 
                         <!-- Buttons -->
                         <div class="col-md-10 mt-4 text-end">
+                             <button
+                type="button"
+                class="btn btn-danger me-2 px-4"
+                (click)="onCancel()"
+              >
+                <i class="fa-solid fa-xmark me-2"></i>
+                Cancel
+              </button>
 
-                            <button class="btn btn-success me-2" type="submit" [disabled]="!interviewForm.valid">
+                            <button class="btn btn-success " type="submit" [disabled]="!interviewForm.valid">
 
                                 <i class="fa-solid fa-save me-2"></i>
 
@@ -98,13 +106,13 @@
 
                             </button>
 
-                            <button class="btn btn-secondary" type="button" (click)="resetForm()">
+                            <!-- <button class="btn btn-secondary" type="button" (click)="resetForm()">
 
                                 <i class="fa-solid fa-rotate-left me-2"></i>
 
                                 Reset
 
-                            </button>
+                            </button> -->
 
                         </div>
 

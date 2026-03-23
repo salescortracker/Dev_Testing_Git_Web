@@ -41,6 +41,17 @@ sortDirection: 'asc' | 'desc' = 'desc'; // default: latest first
 
     this.loadCompanies();
   }
+  onCancel(): void {
+  this.resetForm();
+
+  Swal.fire({
+    icon: 'error',
+    title: 'Cancelled',
+    text: 'Operation cancelled.',
+    timer: 1500,
+    showConfirmButton: false
+  });
+}
 onBulkUploadComplete(message: any) {
   Swal.fire({
     icon: 'success',

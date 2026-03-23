@@ -43,6 +43,18 @@ export class CertificationTypeComponent {
     private cd: ChangeDetectorRef
   ) {}
 userId:any;
+onCancel(): void {
+  this.resetForm();
+
+  Swal.fire({
+    icon: 'error', // 🔴 makes it RED
+    title: 'Cancelled',
+    text: 'Operation cancelled.',
+    timer: 1500,
+    showConfirmButton: false
+  });
+}
+
   ngOnInit(): void {
     this.companyId = Number(sessionStorage.getItem('CompanyId'));
     this.regionId = Number(sessionStorage.getItem('RegionId'));

@@ -64,6 +64,20 @@ shift: ShiftMasterDto = this.getEmptyShift();
       userCompanyId: 0,
     };
   }
+onCancel(): void {
+  this.shift = this.getEmptyShift();   // reset model
+  this.isEditMode = false;             // reset edit mode
+  this.showForm = false;               // hide form
+  this.filteredRegions = [];           // clear dependent dropdown
+
+  Swal.fire({
+    icon: 'warning',
+    title: 'Cancelled',
+    text: 'Operation cancelled.',
+    timer: 1500,
+    showConfirmButton: false
+  });
+}
   onCompanyChange(): void {
   if (!this.shift.companyID) {
     this.filteredRegions = [];
