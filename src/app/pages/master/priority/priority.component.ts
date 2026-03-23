@@ -60,37 +60,55 @@ export class PriorityComponent {
       userId: this.userId
     };
   }
-  loadCompanies() {
-    this.adminService.getCompanies(null, this.userId).subscribe({
-      next: (res: any) => {
-        this.companies = res.data || res;   // ✅ handle both cases
-        this.companyMap = {};
-        this.companies.forEach((c: any) => {
-          this.companyMap[c.companyId] = c.companyName;
-        });
-      },
-      error: () => {
-        Swal.fire('Error', 'Failed to load companies', 'error');
-      }
-    });
-  }
+loadCompanies() {
+  this.adminService.getCompanies(null, this.userId).subscribe({
+    next: (res: any) => {
+      console.log('All Companies 👉', res);
 
+      const data = res?.data ?? res ?? [];
 
-  loadRegions() {
-    this.adminService.getRegions(null, this.userId).subscribe({
-      next: (res: any) => {
-        this.regions = res.data || res;   // ✅ handle both cases
-        this.regionMap = {};
-        this.regions.forEach((r: any) => {
-          this.regionMap[r.regionID] = r.regionName;
-        });
-      },
-      error: () => {
-        Swal.fire('Error', 'Failed to load regions', 'error');
-      }
-    });
-  }
+      // 🔥 Only active companies
+      this.companies = data.filter((c: any) => c.isActive === true);
 
+      // ✅ Build map from active data
+      this.companyMap = {};
+      this.companies.forEach((c: any) => {
+        this.companyMap[c.companyId] = c.companyName;
+      });
+
+      console.log('Active Companies 👉', this.companies);
+      console.log('Company Map 👉', this.companyMap);
+    },
+    error: () => {
+      Swal.fire('Error', 'Failed to load companies', 'error');
+    }
+  });
+}
+
+ loadRegions() {
+  this.adminService.getRegions(null, this.userId).subscribe({
+    next: (res: any) => {
+      console.log('All Regions 👉', res);
+
+      const data = res?.data ?? res ?? [];
+
+      // 🔥 Only active regions
+      this.regions = data.filter((r: any) => r.isActive === true);
+
+      // ✅ Build map from active data
+      this.regionMap = {};
+      this.regions.forEach((r: any) => {
+        this.regionMap[r.regionID] = r.regionName;
+      });
+
+      console.log('Active Regions 👉', this.regions);
+      console.log('Region Map 👉', this.regionMap);
+    },
+    error: () => {
+      Swal.fire('Error', 'Failed to load regions', 'error');
+    }
+  });
+}
 
 
   loadPriorities() {

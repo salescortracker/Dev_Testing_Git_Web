@@ -53,21 +53,41 @@ filteredRegions: any[] = [];
    
      this.loadStatuses();
   }
-  loadCompaniesAndRegions() {
+ loadCompaniesAndRegions() {
   this.adminService.getCompanies(null, this.userId).subscribe({
     next: (companyRes: any) => {
 
-      this.companies = companyRes?.data?.data || companyRes || [];
+      console.log('All Companies 👉', companyRes);
+
+      const companyData = companyRes?.data?.data ?? companyRes ?? [];
+
+      // 🔥 Only active companies
+      this.companies = companyData.filter((c: any) => c.isActive === true);
+
+      console.log('Active Companies 👉', this.companies);
 
       this.adminService.getRegions(null, this.userId).subscribe({
         next: (regionRes: any) => {
 
-          this.allRegions = regionRes?.data?.data || regionRes || [];
+          console.log('All Regions 👉', regionRes);
 
-          // NOW categories load AFTER both are ready
+          const regionData = regionRes?.data?.data ?? regionRes ?? [];
+
+          // 🔥 Only active regions
+          this.allRegions = regionData.filter((r: any) => r.isActive === true);
+
+          console.log('Active Regions 👉', this.allRegions);
+
+          // ✅ Call after both ready
           this.loadStatuses();
+        },
+        error: () => {
+          Swal.fire('Error', 'Failed to load regions.', 'error');
         }
       });
+    },
+    error: () => {
+      Swal.fire('Error', 'Failed to load companies.', 'error');
     }
   });
 }

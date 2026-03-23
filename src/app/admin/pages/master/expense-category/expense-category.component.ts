@@ -248,17 +248,35 @@ sortTable(column: string): void {
     this.sortDirection = 'asc';
   }
 }
-  loadCompanies(): void {
-      this.admin.getCompanies(null,this.userId).subscribe({
-        next: (res:any) => (this.companies = res),
-        error: () => Swal.fire('Error', 'Failed to load companies.', 'error')
-      });
-    }
+loadCompanies(): void {
+  this.admin.getCompanies(null, this.userId).subscribe({
+    next: (res: any) => {
+      console.log('All Companies 👉', res);
+
+      const data = res?.data ?? res ?? [];
+
+      // 🔥 Only active companies
+      this.companies = data.filter((c: any) => c.isActive === true);
+
+      console.log('Active Companies 👉', this.companies);
+    },
+    error: () => Swal.fire('Error', 'Failed to load companies.', 'error')
+  });
+}
   
-    loadRegions(): void {
-      this.admin.getRegions(null,this.userId).subscribe({
-        next: (res:any) => (this.regions = res),
-        error: () => Swal.fire('Error', 'Failed to load regions.', 'error')
-      });
-    }
+loadRegions(): void {
+  this.admin.getRegions(null, this.userId).subscribe({
+    next: (res: any) => {
+      console.log('All Regions 👉', res);
+
+      const data = res?.data ?? res ?? [];
+
+      // 🔥 Only active regions
+      this.regions = data.filter((r: any) => r.isActive === true);
+
+      console.log('Active Regions 👉', this.regions);
+    },
+    error: () => Swal.fire('Error', 'Failed to load regions.', 'error')
+  });
+}
 }

@@ -80,17 +80,33 @@ shift: ShiftMasterDto = this.getEmptyShift();
   this.shift.regionID = 0;
 }
 
-  loadCompanies(): void {
-    this.userService.getCompanies(null, this.userId).subscribe({
-      next: (res: any) => this.companies = res,
-      error: () => Swal.fire('Error', 'Failed to load companies', 'error')
-    });
-  }
+loadCompanies(): void {
+  this.userService.getCompanies(null, this.userId).subscribe({
+    next: (res: any) => {
+      console.log('All Companies 👉', res);
 
-  loadRegions(): void {
+      const data = res?.data ?? res ?? [];
+
+      // 🔥 Only active companies
+      this.companies = data.filter((c: any) => c.isActive === true);
+
+      console.log('Active Companies 👉', this.companies);
+    },
+    error: () => Swal.fire('Error', 'Failed to load companies', 'error')
+  });
+}
+
+loadRegions(): void {
   this.userService.getRegions(null, this.userId).subscribe({
     next: (res: any) => {
-      this.regions = res || [];
+      console.log('All Regions 👉', res);
+
+      const data = res?.data ?? res ?? [];
+
+      // 🔥 Only active regions
+      this.regions = data.filter((r: any) => r.isActive === true);
+
+      console.log('Active Regions 👉', this.regions);
     },
     error: () => this.showError('Failed to load regions')
   });

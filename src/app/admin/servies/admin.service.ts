@@ -435,12 +435,13 @@ export interface Gender {
   genderID: number;
   genderName: string;
   isActive: boolean;
-  companyId: number;
+ // companyId: number;
   regionId: number; 
    // ✅ add these
   companyName?: string;
   regionName?: string;
   userId?: number;
+  companyID:Number;
 }
 
 export interface Region {

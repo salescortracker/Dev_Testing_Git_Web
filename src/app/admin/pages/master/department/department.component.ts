@@ -70,20 +70,33 @@ userId: number = sessionStorage.getItem('UserId') ? Number(sessionStorage.getIte
       error: () => Swal.fire('Error', 'Failed to load departments.', 'error')
     });
   }
+loadCompanies(): void {
+  this.departmentService.getCompanies(null, this.userId).subscribe({
+    next: (res: any) => {
+      console.log('All Companies 👉', res);
 
-  loadCompanies(): void {
-    this.departmentService.getCompanies(null,this.userId).subscribe({
-      next: (res:any) => (this.companies = res),
-      error: () => Swal.fire('Error', 'Failed to load companies.', 'error')
-    });
-  }
+      // 🔥 Filter active companies only
+      this.companies = (res || []).filter((c: any) => c.isActive === true);
 
-  loadRegions(): void {
-    this.departmentService.getRegions(null,this.userId).subscribe({
-      next: (res:any) => (this.regions = res),
-      error: () => Swal.fire('Error', 'Failed to load regions.', 'error')
-    });
-  }
+      console.log('Active Companies 👉', this.companies);
+    },
+    error: () => Swal.fire('Error', 'Failed to load companies.', 'error')
+  });
+}
+
+loadRegions(): void {
+  this.departmentService.getRegions(null, this.userId).subscribe({
+    next: (res: any) => {
+      console.log('All Regions 👉', res);
+
+      // 🔥 Filter active regions only
+      this.regions = (res || []).filter((r: any) => r.isActive === true);
+
+      console.log('Active Regions 👉', this.regions);
+    },
+    error: () => Swal.fire('Error', 'Failed to load regions.', 'error')
+  });
+}
 
   // ------------------------------------------------------------
   // 🔹 Create / Update Department

@@ -44,7 +44,7 @@
             <div class="col-md-6">
               <label class="form-label fw-semibold">Department</label>
               <select class="form-select" [(ngModel)]="designation.departmentId" name="departmentId" required>
-                <option value="">Select Department</option>
+                <option value="0">Select Department</option>
 
                 <option *ngFor="let dept of departments" [value]="dept.departmentId">
                   {{ dept.departmentName || dept.description }}
@@ -58,7 +58,7 @@
             <div class="col-md-6">
               <label class="form-label fw-semibold">Company</label>
               <select class="form-select" [(ngModel)]="designation.companyId" name="companyId" required>
-                <option value="">Select Company</option>
+                <option value="0">Select Company</option>
                 <option *ngFor="let company of companies" [value]="company.companyId">
                   {{ company.companyName }}
                 </option>
@@ -69,7 +69,7 @@
             <div class="col-md-6">
               <label class="form-label fw-semibold">Region</label>
               <select class="form-select" [(ngModel)]="designation.regionId" name="regionId" required>
-                <option value="">Select Region</option>
+                <option value="0">Select Region</option>
                 <option *ngFor="let region of regions" [value]="region.regionID">
                   {{ region.regionName }}
                 </option>

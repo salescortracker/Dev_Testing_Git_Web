@@ -49,7 +49,8 @@ regionMap: { [key: number]: string } = {};
       genderID: 0,
       genderName: '',     
       isActive: true,
-      companyId: 0,
+    //  companyId: 0,
+      companyID:0,
       regionId: 0,
         companyName: '',  
           regionName: '',  
@@ -61,12 +62,11 @@ regionMap: { [key: number]: string } = {};
   // 🔹 Load Genders
   // ------------------------------------------------------------
  loadGenders(): void {
-  debugger;
+
   this.spinner.show();
 
   this.adminservice.getGenders(this.companyId, this.regionId,this.userId).subscribe({
     next: (res: any) => {
-      debugger;
       this.genders = res.data.map((g: Gender) => ({
   ...g,
   // companyName: this.companyMap[g.companyId] || 'N/A',
@@ -95,7 +95,7 @@ regionMap: { [key: number]: string } = {};
       this.adminservice.updateGender(this.gender).subscribe({
         next: (res:any) => {
           this.spinner.hide();
-           debugger;
+          
           if(res.message.toLowerCase().includes('duplicate record found')) {
             Swal.fire('warning', res.message, 'warning');
             return;
@@ -134,7 +134,12 @@ regionMap: { [key: number]: string } = {};
   // 🔹 Edit Gender
   // ------------------------------------------------------------
   editGender(g: Gender): void {
-    this.gender = { ...g };
+    console.log('Edit Clicked Row Data 👉', g); 
+      this.gender = {
+    ...g,
+    companyID: g.companyID,   // ✅ FIX HERE
+    regionId: g.regionId
+  };
     this.isEditMode = true;
   }
 
@@ -307,27 +312,43 @@ regionMap: { [key: number]: string } = {};
   }
 
   
-    loadCompanies(): void {
-  this.adminservice.getCompanies(null,this.userId).subscribe({
+loadCompanies(): void {
+  this.adminservice.getCompanies(null, this.userId).subscribe({
     next: (res: any[]) => {
-      this.companies = res;
+      console.log('All Companies 👉', res);
+
+      // 🔥 Filter only active companies
+      this.companies = (res || []).filter((c: any) => c.isActive === true);
+
+      // ✅ Build company map from filtered data
       this.companyMap = {};
-      this.companies.forEach((c:any) => {
+      this.companies.forEach((c: any) => {
         this.companyMap[c.companyId] = c.companyName;
       });
+
+      console.log('Active Companies 👉', this.companies);
+      console.log('Company Map 👉', this.companyMap);
     },
     error: () => Swal.fire('Error', 'Failed to load companies.', 'error')
   });
 }
 
 loadRegions(): void {
-  this.adminservice.getRegions(null,this.userId).subscribe({
+  this.adminservice.getRegions(null, this.userId).subscribe({
     next: (res: any[]) => {
-      this.regions = res;
+      console.log('All Regions 👉', res);
+
+      // 🔥 Filter only active regions
+      this.regions = (res || []).filter((r: any) => r.isActive === true);
+
+      // ✅ Build region map from filtered data
       this.regionMap = {};
-      this.regions.forEach((r:any) => {
+      this.regions.forEach((r: any) => {
         this.regionMap[r.regionID] = r.regionName;
       });
+
+      console.log('Active Regions 👉', this.regions);
+      console.log('Region Map 👉', this.regionMap);
     },
     error: () => Swal.fire('Error', 'Failed to load regions.', 'error')
   });
