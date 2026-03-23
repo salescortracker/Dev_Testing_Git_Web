@@ -10,14 +10,14 @@
       <div class="d-flex gap-2">
         <!-- Export Dropdown -->
         <div class="dropdown">
-          <button
+          <!-- <button
             class="btn btn-outline-secondary dropdown-toggle"
             type="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
             <i class="fa-solid fa-download me-2"></i> Export
-          </button>
+          </button> -->
           <ul class="dropdown-menu dropdown-menu-end animate__animated animate__fadeIn">
             <li><a class="dropdown-item" (click)="exportAs('pdf')">Download PDF</a></li>
             <li><a class="dropdown-item" (click)="exportAs('excel')">Download Excel</a></li>
@@ -58,7 +58,7 @@
             </div>
 
             <!-- Region -->
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label class="form-label fw-semibold">Region</label>
               <select class="form-select" [(ngModel)]="category.regionId" name="regionId">
                 <option value="">Select Region</option>
@@ -69,7 +69,7 @@
             </div>
 
             <!-- Status -->
-            <div class="col-md-6 d-flex align-items-center">
+            <div class="col-md-4 d-flex align-items-center">
               <div class="form-check form-switch mt-3">
                 <input
                   class="form-check-input"
@@ -85,8 +85,16 @@
             </div>
 
             <!-- Submit -->
-            <div class="col-md-6 d-flex align-items-end">
-              <button type="submit" class="btn btn-dark w-100" [disabled]="!categoryForm.valid">
+            <div class="col-md-4 d-flex justify-content-end align-items-end gap-2">
+               <button
+                type="button"
+                class="btn btn-danger px-4"
+                (click)="onCancel()"
+              >
+                <i class="fa-solid fa-xmark me-2"></i>
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-success " [disabled]="!categoryForm.valid">
                 <i class="fa-solid fa-save me-2"></i>
                 {{ isEditMode ? 'Update Category' : 'Save Category' }}
               </button>

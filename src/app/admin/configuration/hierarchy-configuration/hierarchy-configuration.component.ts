@@ -42,7 +42,17 @@ export class HierarchyConfigurationComponent {
   regionId: number = Number(sessionStorage.getItem('RegionId')) || 0;
 
   constructor(private service: AdminService) {}
+onCancel(): void {
+  this.resetForm();
 
+  Swal.fire({
+    icon: 'error', // 🔴 makes it RED
+    title: 'Cancelled',
+    text: 'Operation cancelled.',
+    timer: 1500,
+    showConfirmButton: false
+  });
+}
   ngOnInit(): void {
  
     this.loadDepartments();

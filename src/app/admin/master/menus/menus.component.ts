@@ -24,7 +24,17 @@ export class MenusComponent {
   pageSizeOptions = [5,10, 20, 50, 100];
 
   constructor(private menuService: AdminService) {}
+onCancel(): void {
+  this.resetForm();
 
+  Swal.fire({
+    icon: 'error', // 🔴 red style (same as others)
+    title: 'Cancelled',
+    text: 'Operation cancelled.',
+    timer: 1500,
+    showConfirmButton: false
+  });
+}
   ngOnInit(): void {
     this.loadMenus();
   }

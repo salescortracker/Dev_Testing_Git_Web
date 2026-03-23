@@ -44,7 +44,17 @@ searchText = '';
     private adminService: AdminService,
     private spinner: NgxSpinnerService
   ) { }
+onCancel(): void {
+  this.clearForm();
 
+  Swal.fire({
+    icon: 'error', // 🔴 makes it RED
+    title: 'Cancelled',
+    text: 'Operation cancelled.',
+    timer: 1500,
+    showConfirmButton: false
+  });
+}
   ngOnInit(): void {
 
     this.userId = Number(sessionStorage.getItem("UserId"));

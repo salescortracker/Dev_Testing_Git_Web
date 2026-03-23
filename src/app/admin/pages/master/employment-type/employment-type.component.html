@@ -9,9 +9,9 @@
 
       <div class="d-flex gap-2">
         <div class="dropdown">
-          <button class="btn btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown">
+          <!-- <button class="btn btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown">
             <i class="fa-solid fa-download me-2"></i> Export
-          </button>
+          </button> -->
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item">Download PDF</a></li>
             <li><a class="dropdown-item">Download Excel</a></li>
@@ -80,7 +80,7 @@
             </div>
 
             <!-- Is Active -->
-            <div class="col-md-2 d-flex align-items-center mt-4">
+            <div class="col-md-4 d-flex align-items-center mt-4">
               <label class="me-2 fw-semibold">Is Active</label>
               <div class="form-check form-switch">
                 <input class="form-check-input"
@@ -91,19 +91,28 @@
             </div>
 
             <!-- Buttons -->
-            <div class="col-md-10 mt-4 text-end">
-              <button class="btn btn-success me-2"
+            <div class="col-md-4 mt-4 text-end">
+              <button
+                type="button"
+                class="btn btn-danger px-4 me-2"
+                (click)="onCancel()"
+              >
+                <i class="fa-solid fa-xmark me-2"></i>
+                Cancel
+              </button>
+
+              <button class="btn btn-success "
                       type="submit"
                       [disabled]="!employmentForm.valid">
                 <i class="fa-solid fa-save me-2"></i>
                 {{ isEditMode ? 'Update' : 'Save' }}
               </button>
 
-              <button class="btn btn-secondary"
+              <!-- <button class="btn btn-secondary"
                       type="button"
                       (click)="resetForm()">
                 <i class="fa-solid fa-rotate-left me-2"></i> Reset
-              </button>
+              </button> -->
             </div>
 
           </div>

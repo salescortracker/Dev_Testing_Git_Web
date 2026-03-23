@@ -37,7 +37,18 @@ export class LeaveStatusComponent {
     private adminService: AdminService,
     private spinner: NgxSpinnerService
   ) {}
+onCancel(): void {
+  this.leave = this.getEmptyLeave();  // reset model
+  this.isEditMode = false;            // exit edit mode
 
+  Swal.fire({
+    icon: 'error',
+    title: 'Cancelled',
+    text: 'Operation cancelled.',
+    timer: 1500,
+    showConfirmButton: false
+  });
+}
   ngOnInit(): void {
     const user = sessionStorage.getItem('currentUser');
     if (user) {

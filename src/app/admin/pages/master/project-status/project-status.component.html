@@ -9,18 +9,18 @@
 
       <div class="d-flex gap-2">
         <div class="dropdown">
-          <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+          <!-- <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
             <i class="fa-solid fa-download me-2"></i> Export
-          </button>
+          </button> -->
           <ul class="dropdown-menu dropdown-menu-end animate__animated animate__fadeIn">
             <li><a class="dropdown-item" (click)="exportAs('pdf')">Download PDF</a></li>
             <li><a class="dropdown-item" (click)="exportAs('excel')">Download Excel</a></li>
           </ul>
         </div>
 
-        <button class="btn btn-danger" (click)="openUploadPopup()">
+        <!-- <button class="btn btn-danger" (click)="openUploadPopup()">
           <i class="fa-solid fa-upload me-2"></i> Bulk Upload
-        </button>
+        </button> -->
       </div>
     </div>
 
@@ -48,7 +48,7 @@
             </div>
 
             <!-- Region -->
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label>Region</label>
               <select class="form-control" [(ngModel)]="status.RegionId" name="region">
 
@@ -61,7 +61,7 @@
               </select>
 
             </div>
-            <div class="col-md-6 d-flex align-items-center">
+            <div class="col-md-4 d-flex align-items-center">
               <div class="form-check form-switch mt-3">
                 <input class="form-check-input" type="checkbox" id="isActiveSwitch" [(ngModel)]="status.IsActive"
                   name="IsActive">
@@ -70,8 +70,16 @@
                 </label>
               </div>
             </div>
-            <div class="col-md-12 d-flex justify-content-start mt-3">
-              <button type="submit" class="btn btn-dark px-4" [disabled]="!statusForm.valid">
+            <div class="ccol-md-4 d-flex justify-content-end align-items-end gap-2">
+               <button
+                type="button"
+                class="btn btn-danger px-4"
+                (click)="onCancel()"
+              >
+                <i class="fa-solid fa-xmark me-2"></i>
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-success px-4" [disabled]="!statusForm.valid">
                 <i class="fa-solid fa-save me-2"></i>
                 {{ isEditMode ? 'Update Status' : 'Save Status' }}
               </button>

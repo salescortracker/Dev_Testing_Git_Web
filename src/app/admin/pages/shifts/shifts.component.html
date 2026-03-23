@@ -44,15 +44,23 @@
             <input type="time" class="form-control" [(ngModel)]="shift.shiftEndTime" name="shiftEndTime" required>
             </div>
 
-            <div class="col-md-2 d-flex align-items-center">
+            <div class="col-md-4 d-flex align-items-center">
               <div class="form-check form-switch mt-3">
                 <input class="form-check-input" type="checkbox" name="isActive" [(ngModel)]="shift.isActive" />
                 <label class="form-check-label ms-2">{{ shift.isActive ? 'Active' : 'Inactive' }}</label>
               </div>
             </div>
 
-            <div class="col-md-2 d-flex align-items-end">
-              <button type="submit" class="btn btn-dark w-100" [disabled]="!shiftForm.valid">
+            <div class="col-md-4 d-flex align-items-end">
+               <button
+                type="button"
+                class="btn btn-danger me-2 px-4"
+                (click)="onCancel()"
+              >
+                <i class="fa-solid fa-xmark me-2"></i>
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-success " [disabled]="!shiftForm.valid">
                 {{ isEditMode ? 'Update Shift' : 'Save Shift' }}
               </button>
             </div>

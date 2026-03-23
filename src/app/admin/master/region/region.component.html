@@ -1,6 +1,5 @@
 <div class="card shadow-sm">
   <div class="container-fluid p-4 region-management">
-
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h4 class="fw-semibold mb-0">
@@ -11,62 +10,70 @@
       <div class="d-flex gap-2">
         <!-- Export Dropdown -->
         <div class="dropdown">
-          <button
+          <!-- <button
             class="btn btn-outline-secondary dropdown-toggle"
             type="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
             <i class="fa-solid fa-download me-2"></i> Export
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end animate__animated animate__fadeIn">
-              <li><a class="dropdown-item" (click)="exportPDF()">Download PDF</a></li>
-    <li><a class="dropdown-item" (click)="exportExcel()">Download Excel</a></li>
+          </button> -->
+          <ul
+            class="dropdown-menu dropdown-menu-end animate__animated animate__fadeIn"
+          >
+            <li>
+              <a class="dropdown-item" (click)="exportPDF()">Download PDF</a>
+            </li>
+            <li>
+              <a class="dropdown-item" (click)="exportExcel()"
+                >Download Excel</a
+              >
+            </li>
           </ul>
         </div>
 
         <!-- Bulk Upload -->
-        <button class="btn btn-danger" (click)="openUploadPopup()">
+        <!-- <button class="btn btn-danger" (click)="openUploadPopup()">
           <i class="fa-solid fa-upload me-2"></i> Bulk Upload
-        </button>
+        </button> -->
       </div>
     </div>
-
-   
 
     <hr class="mb-4" />
 
     <!-- Region Form -->
     <div class="card shadow-sm mb-4">
       <div class="card-body">
-         <small class="text-muted d-block mb-3">
-      <i class="fa-solid fa-circle-info me-1 text-secondary"></i>
-      Note: Region Name and Company selection,Country are mandatory fields.
-    </small>
+        <small class="text-muted d-block mb-3">
+          <i class="fa-solid fa-circle-info me-1 text-secondary"></i>
+          Note: Region Name and Company selection,Country are mandatory fields.
+        </small>
         <form (ngSubmit)="onSubmit()" #regionForm="ngForm" novalidate>
           <div class="row g-3">
             <!-- Company Dropdown -->
-          <div class="col-md-6">
-  <label class="form-label fw-semibold">
-    Company <span class="text-danger">*</span>
-  </label>
-  <select
-    id="company"
-    class="form-select"
-    [(ngModel)]="region.companyID"
-    name="CompanyID"
-    required
-  >
-    <option [value]="" disabled selected>Choose Company...</option>
-    <option *ngFor="let c of companies" [value]="c.companyId">
-      {{ c.companyName }}
-    </option>
-  </select>
-</div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                Company <span class="text-danger">*</span>
+              </label>
+              <select
+                id="company"
+                class="form-select"
+                [(ngModel)]="region.companyID"
+                name="CompanyID"
+                required
+              >
+                <option [value]="" disabled selected>Choose Company...</option>
+                <option *ngFor="let c of companies" [value]="c.companyId">
+                  {{ c.companyName }}
+                </option>
+              </select>
+            </div>
 
             <!-- Region Name -->
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Region Name <span class="text-danger">*</span></label>
+              <label class="form-label fw-semibold"
+                >Region Name <span class="text-danger">*</span></label
+              >
               <input
                 type="text"
                 class="form-control"
@@ -78,8 +85,10 @@
             </div>
 
             <!-- Country -->
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Country <span class="text-danger">*</span></label>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold"
+                >Country <span class="text-danger">*</span></label
+              >
               <input
                 type="text"
                 class="form-control"
@@ -91,7 +100,7 @@
             </div>
 
             <!-- Active Toggle -->
-            <div class="col-md-6 d-flex align-items-center">
+            <div class="col-md-4 d-flex align-items-center">
               <div class="form-check form-switch mt-3">
                 <input
                   class="form-check-input"
@@ -101,23 +110,36 @@
                   [(ngModel)]="region.isActive"
                 />
                 <label class="form-check-label ms-2" for="isActiveSwitch">
-                  {{ region.isActive ? 'Active' : 'Inactive' }}
+                  {{ region.isActive ? "Active" : "Inactive" }}
                 </label>
               </div>
             </div>
+ <div
+              class="col-md-4 d-flex justify-content-end align-items-end gap-2"
+            >
+              <!-- ❌ Cancel (Red - Left) -->
+              <button
+                type="button"
+                class="btn btn-danger px-4"
+                (click)="onCancel()"
+              >
+                <i class="fa-solid fa-xmark me-2"></i>
+                Cancel
+              </button>
 
-            <!-- Submit -->
-            <div class="col-md-6 d-flex align-items-end">
+              <!-- ✅ Save / Update (Green - Right) -->
               <button
                 type="submit"
-                class="btn btn-dark w-100"
+                class="btn btn-success px-4"
                 [disabled]="!regionForm.valid"
               >
                 <i class="fa-solid fa-save me-2"></i>
-                {{ isEditMode ? 'Update Region' : 'Save Region' }}
+                {{ isEditMode ? "Update" : "Save" }}
               </button>
             </div>
+           
           </div>
+          
         </form>
       </div>
     </div>
@@ -147,36 +169,48 @@
         <!-- Table -->
         <div class="table-responsive">
           <table class="table table-bordered table-hover align-middle">
-          <thead class="table-light">
-  <tr>
-    <th style="width:60px;">S.No</th>
-    <th (click)="sortData('regionName')" class="sortable">
-      Region Name
-      <i *ngIf="sortColumn === 'regionName'" class="fa-solid"
-         [class.fa-sort-up]="sortDirection === 'asc'"
-         [class.fa-sort-down]="sortDirection === 'desc'"></i>
-    </th>
-    <th (click)="sortData('companyID')" class="sortable">
-      Company
-      <i *ngIf="sortColumn === 'companyID'" class="fa-solid"
-         [class.fa-sort-up]="sortDirection === 'asc'"
-         [class.fa-sort-down]="sortDirection === 'desc'"></i>
-    </th>
-    <th (click)="sortData('country')" class="sortable">
-      Country
-      <i *ngIf="sortColumn === 'country'" class="fa-solid"
-         [class.fa-sort-up]="sortDirection === 'asc'"
-         [class.fa-sort-down]="sortDirection === 'desc'"></i>
-    </th>
-    <th (click)="sortData('isActive')" class="text-center sortable">
-      Status
-      <i *ngIf="sortColumn === 'isActive'" class="fa-solid"
-         [class.fa-sort-up]="sortDirection === 'asc'"
-         [class.fa-sort-down]="sortDirection === 'desc'"></i>
-    </th>
-    <th class="text-center" style="width:120px;">Actions</th>
-  </tr>
-</thead>
+            <thead class="table-light">
+              <tr>
+                <th style="width: 60px">S.No</th>
+                <th (click)="sortData('regionName')" class="sortable">
+                  Region Name
+                  <i
+                    *ngIf="sortColumn === 'regionName'"
+                    class="fa-solid"
+                    [class.fa-sort-up]="sortDirection === 'asc'"
+                    [class.fa-sort-down]="sortDirection === 'desc'"
+                  ></i>
+                </th>
+                <th (click)="sortData('companyID')" class="sortable">
+                  Company
+                  <i
+                    *ngIf="sortColumn === 'companyID'"
+                    class="fa-solid"
+                    [class.fa-sort-up]="sortDirection === 'asc'"
+                    [class.fa-sort-down]="sortDirection === 'desc'"
+                  ></i>
+                </th>
+                <th (click)="sortData('country')" class="sortable">
+                  Country
+                  <i
+                    *ngIf="sortColumn === 'country'"
+                    class="fa-solid"
+                    [class.fa-sort-up]="sortDirection === 'asc'"
+                    [class.fa-sort-down]="sortDirection === 'desc'"
+                  ></i>
+                </th>
+                <th (click)="sortData('isActive')" class="text-center sortable">
+                  Status
+                  <i
+                    *ngIf="sortColumn === 'isActive'"
+                    class="fa-solid"
+                    [class.fa-sort-up]="sortDirection === 'asc'"
+                    [class.fa-sort-down]="sortDirection === 'desc'"
+                  ></i>
+                </th>
+                <th class="text-center" style="width: 120px">Actions</th>
+              </tr>
+            </thead>
 
             <tbody>
               <tr *ngFor="let r of pagedRegions; let i = index">
@@ -185,7 +219,9 @@
                 <td>{{ getCompanyName(r.companyID) }}</td>
                 <td>{{ r.country }}</td>
                 <td class="text-center">
-                  <div class="form-check form-switch d-inline-flex align-items-center justify-content-center">
+                  <div
+                    class="form-check form-switch d-inline-flex align-items-center justify-content-center"
+                  >
                     <input
                       class="form-check-input"
                       type="checkbox"
@@ -193,49 +229,66 @@
                       (change)="toggleStatus(r)"
                     />
                     <label class="form-check-label small ms-2">
-                      {{ r.isActive ? 'Active' : 'Inactive' }}
+                      {{ r.isActive ? "Active" : "Inactive" }}
                     </label>
                   </div>
                 </td>
                 <td class="text-center">
-                  <button class="btn btn-sm btn-outline-primary me-2" (click)="editRegion(r)">
+                  <button
+                    class="btn btn-sm btn-outline-primary me-2"
+                    (click)="editRegion(r)"
+                  >
                     <i class="fa-solid fa-pen-to-square"></i>
                   </button>
-                  <button class="btn btn-sm btn-outline-danger" (click)="deleteRegion(r)">
+                  <button
+                    class="btn btn-sm btn-outline-danger"
+                    (click)="deleteRegion(r)"
+                  >
                     <i class="fa-solid fa-trash"></i>
                   </button>
                 </td>
               </tr>
               <tr *ngIf="filteredRegions().length === 0">
-                <td colspan="6" class="text-center text-muted">No records found</td>
+                <td colspan="6" class="text-center text-muted">
+                  No records found
+                </td>
               </tr>
             </tbody>
           </table>
           <!-- Pagination Controls -->
-<div class="d-flex justify-content-between align-items-center mt-3">
-  <div>
-    <label>Items per page:</label>
-    <select class="form-select d-inline-block w-auto ms-2" (change)="changePageSize($event)">
-      
-      <option [value]="5" selected>5</option>
-      <option [value]="10">10</option>
-      <option [value]="20">20</option>
-       <option [value]="50">50</option>
-        <option [value]="100">100</option>
-    </select>
-  </div>
+          <div class="d-flex justify-content-between align-items-center mt-3">
+            <div>
+              <label>Items per page:</label>
+              <select
+                class="form-select d-inline-block w-auto ms-2"
+                (change)="changePageSize($event)"
+              >
+                <option [value]="5" selected>5</option>
+                <option [value]="10">10</option>
+                <option [value]="20">20</option>
+                <option [value]="50">50</option>
+                <option [value]="100">100</option>
+              </select>
+            </div>
 
-  <div>
-    <button class="btn btn-sm btn-outline-secondary me-2" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
-      Prev
-    </button>
-    <span>Page {{ currentPage }} / {{ totalPages }}</span>
-    <button class="btn btn-sm btn-outline-secondary ms-2" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
-      Next
-    </button>
-  </div>
-</div>
-
+            <div>
+              <button
+                class="btn btn-sm btn-outline-secondary me-2"
+                [disabled]="currentPage === 1"
+                (click)="goToPage(currentPage - 1)"
+              >
+                Prev
+              </button>
+              <span>Page {{ currentPage }} / {{ totalPages }}</span>
+              <button
+                class="btn btn-sm btn-outline-secondary ms-2"
+                [disabled]="currentPage === totalPages"
+                (click)="goToPage(currentPage + 1)"
+              >
+                Next
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -245,7 +298,8 @@
 <app-common-upload
   [visible]="showUploadPopup"
   screenName="Region"
-  [model]="regionModel"    
+  [model]="regionModel"
   (uploadComplete)="onBulkUploadComplete($event)"
-  (close)="closeUploadPopup()">
+  (close)="closeUploadPopup()"
+>
 </app-common-upload>

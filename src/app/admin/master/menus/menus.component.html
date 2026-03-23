@@ -75,7 +75,7 @@
             </div>
 
             <!-- Order No -->
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label class="form-label">Order No</label>
               <input
                 type="number"
@@ -87,7 +87,7 @@
             </div>
 
             <!-- Active Switch -->
-            <div class="col-md-6 d-flex align-items-center">
+            <div class="col-md-4 d-flex align-items-center">
               <div class="form-check form-switch">
                 <input
                   class="form-check-input"
@@ -103,16 +103,29 @@
             </div>
 
             <!-- Submit Button -->
-            <div class="col-md-4 d-flex align-items-end">
-              <button
-                type="submit"
-                class="btn btn-dark w-100"
-               
-              >
-                <i class="fa-solid fa-save me-2"></i>
-                {{ isEditMode ? 'Update Menu' : 'Save Menu' }}
-              </button>
-            </div>
+            <div class="col-md-4 d-flex justify-content-end align-items-end gap-2">
+
+  <!-- ❌ Cancel (Red - Left) -->
+  <button
+    
+    type="button"
+    class="btn btn-danger px-4"
+    (click)="onCancel()"
+  >
+    <i class="fa-solid fa-xmark me-2"></i>
+    Cancel
+  </button>
+
+  <!-- ✅ Save / Update (Green - Right) -->
+  <button
+    type="submit"
+    class="btn btn-success px-4"
+  >
+    <i class="fa-solid fa-save me-2"></i>
+    {{ isEditMode ? 'Update' : 'Save' }}
+  </button>
+
+</div>
           </div>
         </form>
       </div>
