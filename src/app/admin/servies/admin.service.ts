@@ -233,8 +233,12 @@ export interface AssetStatus {
 }
 export interface PolicyCategory {
   PolicyCategoryID: number;
-  CompanyID: number;
-  RegionID: number;
+  // CompanyID: number;
+  // RegionID: number;
+  CompanyId:number;
+  RegionId: number;
+    companyName: string;   // ✅ add
+  regionName: string; 
   PolicyCategoryName: string;
     Description?: string;
   IsActive: boolean;
@@ -1178,12 +1182,16 @@ createPolicyCategory(data: any) {
 }
 
 updatePolicyCategory(data: any) {
+
   return this.http.post(`${this.baseUrl}/MasterData/UpdatePolicyCategory`, data);
 }
-
-deletePolicyCategory(id: number) {
-  return this.http.post(`${this.baseUrl}/MasterData/DeletePolicyCategory?id=${id}`, {});
+deletePolicyCategory(policyCategoryId: number) {
+  return this.http.delete(`${this.baseUrl}/MasterData/DeletePolicyCategory/${policyCategoryId}`);
 }
+
+// deletePolicyCategory(id: number) {
+//   return this.http.post(`${this.baseUrl}/MasterData/DeletePolicyCategory?id=${id}`, {});
+// }
 // ===================== POLICIES =====================
 
   // Get All Policies
